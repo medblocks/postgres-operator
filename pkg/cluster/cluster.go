@@ -1503,8 +1503,8 @@ func (c *Cluster) Switchover(curMaster *v1.Pod, candidate spec.NamespacedName) e
 	c.eventRecorder.Eventf(c.GetReference(), v1.EventTypeNormal, "Switchover", "Switching over from %q to %q", curMaster.Name, candidate)
 	stopCh := make(chan struct{})
 	ch := c.registerPodSubscriber(candidate)
-	defer c.unregisterPodSubscriber(candidate)
 	defer close(stopCh)
+	defer c.unregisterPodSubscriber(candidate)
 
 	if err = c.patroni.Switchover(curMaster, candidate.Name); err == nil {
 		c.logger.Debugf("successfully switched over from %q to %q", curMaster.Name, candidate)

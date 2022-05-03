@@ -401,8 +401,8 @@ func (c *Cluster) getPatroniMemberData(pod *v1.Pod) (patroni.MemberData, error) 
 func (c *Cluster) recreatePod(podName spec.NamespacedName) (*v1.Pod, error) {
 	stopCh := make(chan struct{})
 	ch := c.registerPodSubscriber(podName)
-	defer c.unregisterPodSubscriber(podName)
 	defer close(stopCh)
+	defer c.unregisterPodSubscriber(podName)
 
 	err := retryutil.Retry(c.OpConfig.ResourceCheckInterval, c.OpConfig.PodDeletionWaitTimeout,
 		func() (bool, error) {
